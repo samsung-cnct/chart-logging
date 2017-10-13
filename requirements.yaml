@@ -1,0 +1,12 @@
+appr:
+- name: quay.io/samsung_cnct/fluent-bit
+  repository: appr://
+  version: ':stable'
+
+- name: quay.io/samsung_cnct/elasticsearch-chart
+  repository: appr://
+  version: ':stable'
+
+- name: quay.io/samsung_cnct/curator
+  repository: appr://
+  version: ':stable'

@@ -1,11 +1,15 @@
-name: zabra
+name: logging
 version: ${CHART_VER}-${CHART_REL}
-description: Sample chart template for registry
+description: Logging chart for fluent-bit -> elasticsearch (+ curator) -> kibana
 keywords:
 - kraken
-home: https://github.com/samsung-cnct/chart-zabra
+- fluent-bit
+- elasticsearch
+- curator
+- kibana
+home: https://github.com/samsung-cnct/chart-logging
 sources:
-- https://github.com/samsung-cnct/chart-zabra
+- https://github.com/samsung-cnct/chart-logging
 maintainers:
 - name: Samsung CNCT
   email: samsung.cloudnative@gmail.com

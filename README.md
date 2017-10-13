@@ -1,44 +1,68 @@
-# solas-chart
-`solas-chart` is scaffolding for new chart repositories hosted by Samsung CNCT. It
-implements our best practices, such as issue and PR templates, commit hooks,
-licensing guidelines, and so on.
+## Logging for Kubernetes Cluster
+This is a light-weight logging solution for a production grade Kubernetes cluster. This system ensures events are safely pulled from pods, enriched with Kubernetes metadata, saved in a data store and made available for visualizing and querying - without ever leaving the kubernetes cluster.
 
-We use Jenkins to implement our CI/CD pipelines. There is one Jenkins job for
-each GitHub repository. Each job builds, tests and, then deploys an artifact
-to Quay.
-
-SOLAS is also an international maritime treaty to ensure ships comply with
-minimum safety standards in construction, equipment and operation.
-
-# Quickstart
-
-- The name of chart repos should be of the form `chart-${NAME}`. For example,
-`chart-zabra` is the name of the repo which builds a chart named `zabra`.
-
-- [Create](https://help.github.com/articles/creating-a-new-repository/) a
-new empty repo under the [`samsung-cnct`](https://github.com/samsung-cnct)
-org using the GitHub GUI, for example https://github.com/samsung-cnct/chart-zabra .
-
-- [Duplicate](https://help.github.com/articles/duplicating-a-repository/)
-this repo (https://github.com/samsung-cnct/solas-chart) and push it to the `chart-zabra`
-repo you created in the previous step. Note the arguments to clone and push.
+## How to install on running Kubernetes cluster with `helm`
+Get Helm [here](https://github.com/kubernetes/helm/blob/master/docs/install.md).
+Make sure your cluster has at least 6 clusterNodes and update the providerConfig.type to m4.xlarge
+Install Helm and the Helm registry plugin with [these](https://github.com/app-registry/appr-helm-plugin/blob/master/README.md#install-the-helm-registry-plugin) instructions.
 
 ```
-git clone --bare https://github.com/samsung-cnct/solas-chart.git
-cd solas-chart.git
-git push --mirror https://github.com/samsung-cnct/chart-zabra.git
-cd ..
-rm -rf solas-chart.git
+helm registry install quay.io/samsung_cnct/logging
 ```
 
-- Configure CI/CD by following the instructions for
-[GitHub](https://github.com/samsung-cnct/solas/blob/master/docs/github.md),
-[Quay](https://github.com/samsung-cnct/solas/blob/master/docs/quay.md),
-and [Jenkins](https://github.com/samsung-cnct/solas/blob/master/docs/jenkins.md).
 
-- Configure [Slack](https://github.com/samsung-cnct/solas/blob/master/docs/slack.md)
-notifications.
+Or add the following to your [K2](https://github.com/samsung-cnct/kraken-lib) configuration template:
 
-- [Fork](https://help.github.com/articles/fork-a-repo/) the `chart-zabra` repo
-(https://github.com/samsung-cnct/chart-zabra) from `samsung-cnct` and begin
-submitting PRs.
+```
+helmConfigs:
+  - &defaultHelm
+    name: defaultHelm
+    kind: helm
+    repos:
+      - name: atlas
+        url: http://atlas.cnct.io
+      - name: stable
+        url: https://kubernetes-charts.storage.googleapis.com
+    charts:
+      - name: logging
+        registry: quay.io
+        chart: samsung_cnct/logging
+        version: # will update soon
+        namespace: kube-system
+```
+
+
+Get [kraken](https://github.com/samsung-cnct/kraken) to help you deploy a Kubernetes cluster.
+
+## Assets
+Assets for each component in the centralized logging system including github repo, quay repo for the container and quay app registry for the chart.
+
+**On Node Collector:** A Fluent-bit daemonset is responsible for collecting logs from applications on pods.
+* Github Container Repo: https://github.com/samsung-cnct/container-fluent-bit
+* Github Chart Repo: https://github.com/samsung-cnct/chart-fluent-bit
+* Image: https://quay.io/repository/samsung_cnct/fluent-bit-container
+* Chart: https://quay.io/application/samsung_cnct/fluent-bit
+
+**Queryable Datastore:** ElasticSearch
+* Github Container Repo: https://github.com/samsung-cnct/container-elasticsearch
+* Github Chart Repo: https://github.com/samsung-cnct/chart-elasticsearch
+* Image: https://quay.io/repository/samsung_cnct/elasticsearch-container
+* Chart: https://quay.io/application/samsung_cnct/elasticsearch-chart
+
+**Data Visualization:** Kibana
+* Github Container Repo: https://github.com/samsung-cnct/container-kibana
+* Github Chart Repo: https://github.com/samsung-cnct/chart-kibana
+* Image: https://quay.io/repository/samsung_cnct/kibana-container
+* Chart: https://quay.io/application/samsung_cnct/kibana-chart
+
+## Contributing
+
+1. Fork it!
+2. Create your feature branch: `git checkout -b my-new-feature`
+3. Commit your changes: `git commit -am 'Add some feature'`
+4. Push to the branch: `git push origin my-new-feature`
+5. Submit a pull request :D
+
+## Credits
+
+Created and maintained by the Samsung Cloud Native Computing Team.

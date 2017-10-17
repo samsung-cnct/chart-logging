@@ -1,5 +1,5 @@
-## Logging for Kubernetes Cluster
-This is a light-weight logging solution for a production grade Kubernetes cluster. This system ensures events are safely pulled from pods, enriched with Kubernetes metadata, saved in a data store and made available for visualizing and querying - without ever leaving the kubernetes cluster.
+# Logging for Kubernetes Cluster
+This is a light-weight logging solution for a production grade Kubernetes cluster. This system ensures events are safely pulled from pods, enriched with Kubernetes metadata, saved in a data store and made available for visualizing and querying - without ever leaving the kubernetes cluster.  Currently this system does not handle etcd logs, nor Kubernetes event stream logs. We are working towards including these logs in future iterations of this pipeline.
 
 ## How to install on running Kubernetes cluster with `helm`
 Get Helm [here](https://github.com/kubernetes/helm/blob/master/docs/install.md).
@@ -31,6 +31,7 @@ helmConfigs:
         namespace: kube-system
 ```
 
+Once this system is set up, you can see your logs by running `kubectl get svc kibana-logging -owide`, then view your logs at ``<EXTERNAL_IP>:5601`
 
 Get [kraken](https://github.com/samsung-cnct/kraken) to help you deploy a Kubernetes cluster.
 
@@ -48,6 +49,12 @@ Assets for each component in the centralized logging system including github rep
 * Github Chart Repo: https://github.com/samsung-cnct/chart-elasticsearch
 * Image: https://quay.io/repository/samsung_cnct/elasticsearch-container
 * Chart: https://quay.io/application/samsung_cnct/elasticsearch-chart
+
+**Index Manager for Elasticsearch** Curator
+* Github Container Repo: https://github.com/samsung-cnct/container-curator
+* Github Chart Repo: https://github.com/samsung-cnct/chart-curator
+* Image: https://quay.io/repository/samsung_cnct/curator-container
+* Chart: https://quay.io/application/samsung_cnct/curator
 
 **Data Visualization:** Kibana
 * Github Container Repo: https://github.com/samsung-cnct/container-kibana

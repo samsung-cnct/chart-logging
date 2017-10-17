@@ -1,5 +1,5 @@
 # Logging for Kubernetes Cluster
-This is a light-weight logging solution for a production grade Kubernetes cluster. This system ensures events are safely pulled from pods, enriched with Kubernetes metadata, saved in a data store and made available for visualizing and querying - without ever leaving the kubernetes cluster.  Currently this system does not handle etcd logs, nor Kubernetes event stream logs. We are working towards including these logs in future iterations of this pipeline.
+This is a light-weight logging solution for a production grade Kubernetes cluster. This system pulls logs from pods, enriches them with Kubernetes metadata, saves them in a data store and makes them available for visualizing and querying - without ever leaving the kubernetes cluster.  Currently this system does not handle etcd logs, nor Kubernetes event stream logs. We are working towards including these logs in future iterations of this pipeline.
 
 ## How to install on running Kubernetes cluster with `helm`
 Get Helm [here](https://github.com/kubernetes/helm/blob/master/docs/install.md).

@@ -1,0 +1,18 @@
+name: kibana-chart
+version: 0.0.0-4
+description: Sample chart template for registry
+keywords:
+- kraken
+- kubernetes
+- logging
+- data
+- elasticsearch
+- kibana
+home: https://github.com/samsung-cnct/chart-kibana
+sources:
+- https://github.com/samsung-cnct/chart-kibana
+maintainers:
+- name: Samsung CNCT
+  email: samsung.cloudnative@gmail.com
+icon: https://github.com/samsung-cnct/solas/docs/images/samsung-logo.svg
+engine: gotpl

@@ -1,16 +1,22 @@
 appr:
-- name: quay.io/samsung_cnct/fluent-bit
-  repository: appr://
-  version: ':stable'
-
-- name: quay.io/samsung_cnct/elasticsearch-chart
-  repository: appr://
-  version: ':stable'
-
-- name: quay.io/samsung_cnct/curator
-  repository: appr://
-  version: ':stable'
-
-- name: quay.io/samsung_cnct/kibana-chart
-  repository: appr://
-  version: ':stable'
+- &id002
+  name: fluent-bit
+  repository: file://appr_charts/samsung_cnct/fluent-bit
+  version: 0.0.0-4
+- &id001
+  name: elasticsearch-chart
+  repository: file://appr_charts/samsung_cnct/elasticsearch-chart
+  version: 0.0.0-20
+- &id003
+  name: curator
+  repository: file://appr_charts/samsung_cnct/curator
+  version: 0.0.0-5
+- &id004
+  name: kibana-chart
+  repository: file://appr_charts/samsung_cnct/kibana-chart
+  version: 0.0.0-4
+dependencies:
+- *id001
+- *id002
+- *id003
+- *id004

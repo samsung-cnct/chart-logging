@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{.Values.name}}
+  labels:
+    app: {{.Values.app}}
+    kubernetes.io/cluster-service: "true"
+    kubernetes.io/name: "Kibana"
+spec:
+  type: LoadBalancer
+  selector:
+    component: {{.Values.component}}
+  ports:
+    - name: http
+      port: {{.Values.port}}
+      protocol: TCP
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{.Values.name}}
+spec:
+  replicas: {{.Values.replicas}}
+  template:
+    metadata:
+      labels:
+        component: {{.Values.component}}
+    spec:
+      containers:
+      - name: {{.Values.container_name}}
+        image: {{.Values.image}}
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: {{.Values.cpu_limit}}
+          requests:
+            cpu: {{.Values.cpu_requests}}
+        env:
+          - name: "{{.Values.env_name}}"
+            value: "{{.Values.env_value}}"
+        ports:
+        - containerPort: {{.Values.container_port}}
+          name: ui
+          protocol: TCP
+      {{- if .Values.tolerations }}
+      tolerations:
+      {{- range .Values.tolerations }}
+      - key: {{ .key | default ("") }}
+        value: {{ .value | default ("")}}
+        operator: {{ .operator | default ("Equal") }}
+        effect: {{ .effect  | default ("")}}
+      {{- end }}
+      {{- end }}
+      {{- if .Values.scheduling.affinity }}
+      {{- if .Values.scheduling.affinity.node }}
+      {{- if .Values.scheduling.affinity.node.labels }}
+      affinity:
+        nodeAffinity:
+          {{ .Values.scheduling.affinity.node.type }}:
+            nodeSelectorTerms:
+            - matchExpressions:
+                {{- range .Values.scheduling.affinity.node.labels }}
+                - key: {{ .key }}
+                  operator: {{ .operator }}
+                  values:
+                  {{- range .values }}
+                  - {{ . }}
+                  {{- end }}
+                {{- end }}
+      {{- end }}
+      {{- end }}
+      {{- end }}

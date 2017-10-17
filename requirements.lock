@@ -1,0 +1,35 @@
+dependencies:
+- alias: ""
+  condition: ""
+  enabled: false
+  import-values: null
+  name: elasticsearch-chart
+  repository: file://appr_charts/samsung_cnct/elasticsearch-chart
+  tags: null
+  version: 0.0.0-20
+- alias: ""
+  condition: ""
+  enabled: false
+  import-values: null
+  name: fluent-bit
+  repository: file://appr_charts/samsung_cnct/fluent-bit
+  tags: null
+  version: 0.0.0-4
+- alias: ""
+  condition: ""
+  enabled: false
+  import-values: null
+  name: curator
+  repository: file://appr_charts/samsung_cnct/curator
+  tags: null
+  version: 0.0.0-5
+- alias: ""
+  condition: ""
+  enabled: false
+  import-values: null
+  name: kibana-chart
+  repository: file://appr_charts/samsung_cnct/kibana-chart
+  tags: null
+  version: 0.0.0-4
+digest: sha256:4d7167411a12bcc16d3ec4c1af19609de59cf562a433f3a09447ced78f3085df
+generated: 2017-10-16T15:17:18.991783586-07:00

@@ -11,7 +11,7 @@ helm registry install quay.io/samsung_cnct/logging
 ```
 
 
-Or add the following to your [K2](https://github.com/samsung-cnct/kraken-lib) configuration template:
+Or add the following to your [kraken-lib](https://github.com/samsung-cnct/kraken-lib) [configuration template](https://github.com/samsung-cnct/kraken-lib/blob/5309d46209d5dae53ae70a53dc4bf781e3cf59b5/ansible/roles/kraken.config/files/config.yaml#L14-L28):
 
 ```
 helmConfigs:

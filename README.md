@@ -31,7 +31,7 @@ helmConfigs:
         namespace: kube-system
 ```
 
-Once this system is set up, you can see your logs by running `kubectl get svc kibana-logging -owide`, then view your logs at ``<EXTERNAL_IP>:5601`
+Once this system is set up, you can see your logs by running `kubectl get svc kibana-logging -owide`, then view your logs at `<EXTERNAL_IP>:5601`
 
 Get [kraken](https://github.com/samsung-cnct/kraken) to help you deploy a Kubernetes cluster.
 

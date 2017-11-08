@@ -1,5 +1,5 @@
 name: fluent-bit
-version: 0.0.0-4
+version: 0.0.0-8
 description: Fluent-bit chart for collecting journald, docker, and kernel logs within a kraken created kubernetes cluster
 keywords:
 - logging

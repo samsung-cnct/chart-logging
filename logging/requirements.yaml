@@ -2,11 +2,11 @@ appr:
 - &id002
   name: fluent-bit
   repository: file://appr_charts/samsung_cnct/fluent-bit
-  version: 0.0.0-4
+  version: 0.0.0-8
 - &id001
   name: elasticsearch-chart
   repository: file://appr_charts/samsung_cnct/elasticsearch-chart
-  version: 0.0.0-20
+  version: 0.0.0-25
 - &id003
   name: curator
   repository: file://appr_charts/samsung_cnct/curator

@@ -6,7 +6,7 @@ dependencies:
   name: elasticsearch-chart
   repository: file://appr_charts/samsung_cnct/elasticsearch-chart
   tags: null
-  version: 0.0.0-20
+  version: 0.0.0-25
 - alias: ""
   condition: ""
   enabled: false
@@ -14,7 +14,7 @@ dependencies:
   name: fluent-bit
   repository: file://appr_charts/samsung_cnct/fluent-bit
   tags: null
-  version: 0.0.0-4
+  version: 0.0.0-8
 - alias: ""
   condition: ""
   enabled: false
@@ -31,5 +31,5 @@ dependencies:
   repository: file://appr_charts/samsung_cnct/kibana-chart
   tags: null
   version: 0.0.0-4
-digest: sha256:4d7167411a12bcc16d3ec4c1af19609de59cf562a433f3a09447ced78f3085df
-generated: 2017-10-16T15:17:18.991783586-07:00
+digest: sha256:bf68e572791ee0d6ae649f7fb84b4939f101053e69b695ebb69073ecd57303f1
+generated: 2017-11-08T09:56:47.889206619-08:00

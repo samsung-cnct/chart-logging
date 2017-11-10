@@ -10,8 +10,7 @@ Install Helm and the Helm registry plugin with [these](https://github.com/app-re
 helm registry install quay.io/samsung_cnct/logging
 ```
 
-
-Or add the following to your [kraken-lib](https://github.com/samsung-cnct/kraken-lib) [configuration template](https://github.com/samsung-cnct/kraken-lib/blob/5309d46209d5dae53ae70a53dc4bf781e3cf59b5/ansible/roles/kraken.config/files/config.yaml#L14-L28):
+To install at cluster creation with [kraken-lib](https://github.com/samsung-cnct/kraken-lib) , edit your  [configuration template](https://github.com/samsung-cnct/kraken-lib/blob/5309d46209d5dae53ae70a53dc4bf781e3cf59b5/ansible/roles/kraken.config/files/config.yaml#L14-L28) `helmConfigs`:
 
 ```
 helmConfigs:
@@ -27,8 +26,8 @@ helmConfigs:
       - name: logging
         registry: quay.io
         chart: samsung_cnct/logging
-        version: # will update soon
-        namespace: kube-system
+        version: 0.0.0-13
+        namespace: default
 ```
 
 Once this system is set up, you can see your logs by running `kubectl get svc kibana-logging -owide`, then view your logs at `<EXTERNAL_IP>:5601`

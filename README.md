@@ -1,3 +1,6 @@
+[![pipeline status](https://git.cnct.io/common-tools/samsung-cnct_chart-logging/badges/master/pipeline.svg)](https://git.cnct.io/common-tools/samsung-cnct_chart-logging/commits/master)
+
+
 # Logging for Kubernetes Cluster
 This is a light-weight logging solution for a production grade Kubernetes cluster. This system pulls logs from pods, enriches them with Kubernetes metadata, saves them in a data store and makes them available for visualizing and querying - without ever leaving the kubernetes cluster.  Currently this system does not handle etcd logs, nor Kubernetes event stream logs. We are working towards including these logs in future iterations of this pipeline.
 

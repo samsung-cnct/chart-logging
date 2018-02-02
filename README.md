@@ -32,9 +32,6 @@ helmConfigs:
         # or you may use version instead of channel (ex: version: 0.0.1-42)
         # visit https://quay.io/application/samsung_cnct/logging to see available versions
 
-        version: 0.0.0-13
-        namespace: default
-
 ```
 
 Once this system is set up, you can see your logs by running `kubectl get svc kibana-logging -owide`, then view your logs at `<EXTERNAL_IP>:5601`

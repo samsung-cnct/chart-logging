@@ -2,7 +2,7 @@
 
 
 # Logging for Kubernetes Cluster
-This is a light-weight logging solution for a production grade Kubernetes cluster. This system pulls logs from pods, enriches them with Kubernetes metadata, saves them in a data store and makes them available for visualizing and querying - without ever leaving the kubernetes cluster.  Currently this system does not handle etcd logs, nor Kubernetes event stream logs. We are working towards including these logs in future iterations of this pipeline.
+This is a light-weight logging solution for a production grade Kubernetes cluster. This system pulls logs from pods, enriches them with Kubernetes metadata, saves them in a data store and makes them available for visualizing and querying - without ever leaving the kubernetes cluster.  This system also handles Kubernetes event stream logs with [eventrouter](https://github.com/samsung-cnct/chart-eventrouter), but does not yet collect etcd logs.
 
 ## How to install on running Kubernetes cluster with `helm`
 Get Helm [here](https://github.com/kubernetes/helm/blob/master/docs/install.md).
@@ -21,16 +21,16 @@ helmConfigs:
     name: defaultHelm
     kind: helm
     repos:
-      - name: atlas
-        url: http://atlas.cnct.io
       - name: stable
         url: https://kubernetes-charts.storage.googleapis.com
     charts:
       - name: logging
         registry: quay.io
         chart: samsung_cnct/logging
-        version: 0.0.0-13
-        namespace: default
+        channel: stable
+        # or you may use version instead of channel (ex: version: 0.0.1-42)
+        # visit https://quay.io/application/samsung_cnct/logging to see available versions
+
 ```
 
 Once this system is set up, you can see your logs by running `kubectl get svc kibana-logging -owide`, then view your logs at `<EXTERNAL_IP>:5601`
@@ -45,6 +45,12 @@ Assets for each component in the centralized logging system including github rep
 * Github Chart Repo: https://github.com/samsung-cnct/chart-fluent-bit
 * Image: https://quay.io/repository/samsung_cnct/fluent-bit-container
 * Chart: https://quay.io/application/samsung_cnct/fluent-bit
+
+**Eventstream Log Collector:**  The eventrouter is used to watch for kubernetes apiserver events. Eventrouter is configured to write the events to stdout.  Fluentbit forwards the stdout events to Elasticsearch.
+* Github Container Repo: https://github.com/samsung-cnct/container-eventrouter
+* Github Chart Repo: https://github.com/samsung-cnct/chart-eventrouter
+* Image: https://quay.io/repository/samsung_cnct/eventrouter-container
+* Chart: https://quay.io/application/samsung_cnct/eventrouter
 
 **Queryable Datastore:** ElasticSearch
 * Github Container Repo: https://github.com/samsung-cnct/container-elasticsearch

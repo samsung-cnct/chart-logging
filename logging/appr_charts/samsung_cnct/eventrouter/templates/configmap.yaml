@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+data:
+  config.json: |- 
+    {
+      "sink": "{{ .Values.config.sink }}" 
+    }
+kind: ConfigMap
+metadata:
+  name: {{ .Values.name }}-configmap
+  namespace: {{ .Values.namespace }} 

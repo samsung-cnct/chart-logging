@@ -10,15 +10,17 @@ helmConfigs:
     kind: helm
     repos:
       -
-        name: atlas
-        url: http://atlas.cnct.io
+        name: stable
+        url: https://kubernetes-charts.storage.googleapis.com
     charts:
       -
         name: curator
         repo: quay.io
         chart: samsung_cnct/curator
-        version: 0.1.0
-        namespace: kube-logging
+        channel: stable
+
+        # or you may you version instead of channel
+        # version: 0.1.0  or  visit https://quay.io/application/samsung_cnct/curator for most recent stable version
 ```
 
 Get [Kraken](https://github.com/samsung-cnct/kraken) to help you deploy a Kubernetes cluster.

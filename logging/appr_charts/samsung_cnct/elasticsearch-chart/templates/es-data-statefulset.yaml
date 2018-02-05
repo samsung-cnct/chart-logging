@@ -35,6 +35,12 @@ spec:
           requests:
             cpu: {{.Values.data_cpu_requests}}
             memory: {{.Values.data_memory_requests}}
+        securityContext:
+          privileged: true
+          capabilities:
+            add:
+              - IPC_LOCK
+              - SYS_RESOURCE
         env:
         - name: CLUSTER_NAME
           value: "{{ .Values.cluster_name }}"
@@ -44,6 +50,8 @@ spec:
           value: "false"
         - name: SERVICE
           value: "{{ .Values.cluster_name }}"
+        - name: HTTP_ENABLE
+          value: "true"
         #  the min/max *must* be the same due to elasticsearch 5.0 bootstrap checks.  For a production settings
         #  this should be 16GB.  Don't go over 32GB as the JVM starts to have issues.
         - name: ES_JAVA_OPTS

@@ -1,0 +1,15 @@
+name: eventrouter
+version: 0.0.1-36
+description: Chart to install eventrouter deployment 
+keywords:
+- kraken
+- eventrouter
+- logging
+home: https://github.com/samsung-cnct/chart-eventrouter
+sources:
+- https://github.com/samsung-cnct/chart-eventrouter
+maintainers:
+- name: Samsung CNCT
+  email: samsung.cloudnative@gmail.com
+icon: https://github.com/samsung-cnct/solas/docs/images/samsung-logo.svg
+engine: gotpl

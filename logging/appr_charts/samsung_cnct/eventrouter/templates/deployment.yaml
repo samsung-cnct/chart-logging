@@ -1,0 +1,27 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        component: eventrouter
+        tier: control-plane-addons
+    spec:
+      containers:
+        - name: {{ .Values.name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+          - name: config-volume
+            mountPath: /etc/eventrouter 
+      serviceAccount: {{ .Values.name }}
+      volumes: 
+        - name: config-volume
+          configMap:
+            name: {{ .Values.name }}-configmap
+  

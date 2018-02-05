@@ -1,22 +1,27 @@
 appr:
-- &id002
+- &id004
   name: fluent-bit
   repository: file://appr_charts/samsung_cnct/fluent-bit
   version: 0.0.0-8
 - &id001
   name: elasticsearch-chart
   repository: file://appr_charts/samsung_cnct/elasticsearch-chart
-  version: 0.0.0-25
+  version: 0.0.0-28
 - &id003
   name: curator
   repository: file://appr_charts/samsung_cnct/curator
-  version: 0.0.0-5
-- &id004
+  version: 0.0.1-0
+- &id005
   name: kibana-chart
   repository: file://appr_charts/samsung_cnct/kibana-chart
   version: 0.0.0-4
+- &id002
+  name: eventrouter
+  repository: file://appr_charts/samsung_cnct/eventrouter
+  version: 0.0.1-36
 dependencies:
 - *id001
 - *id002
 - *id003
 - *id004
+- *id005

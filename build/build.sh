@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/bin/bash
 
 # Our helm charts have the version format 'x.y.z-a', where a is the number of commits since the last tagged version.
 # A tagged version's 'a' will be 0.

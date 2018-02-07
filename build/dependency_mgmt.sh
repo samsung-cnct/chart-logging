@@ -27,5 +27,8 @@ cd `pwd`/${CHART_NAME}
 #  overwrite requirements.yaml, this is the fudge
 helm registry dep --overwrite
 
+#  update local helm index
+helm repo update
+
 #  update the deps
 helm dep build

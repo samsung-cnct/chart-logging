@@ -38,6 +38,14 @@ helm_test:
   script:
     - build/test.sh
 
+helm_serve:
+  stage: dependency_mgmt
+  only:
+    - tags
+    - branches
+  script:
+    helm serve
+
 fetch_deps:
   stage: dependency_mgmt  
   only:

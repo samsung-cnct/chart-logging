@@ -34,3 +34,6 @@ helm repo update
 
 #  update the deps
 helm dep build
+
+#  stop the helm server
+kill -9 $!

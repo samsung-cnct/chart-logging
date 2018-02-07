@@ -70,6 +70,11 @@ Assets for each component in the centralized logging system including github rep
 * Image: https://quay.io/repository/samsung_cnct/kibana-container
 * Chart: https://quay.io/application/samsung_cnct/kibana-chart
 
+## Vendoring strategy
+This project is built with the [helm application registry](https://github.com/app-registry/appr-helm-plugin) and pushed to [quay](quay.io).  Unfortunately the [helm registry plugin doesn't play nicely](https://github.com/app-registry/appr-helm-plugin/issues/3#issuecomment-302701693) with standard helm dependencies.  The vendored files for a given release (stable or alpha) are built in the CI process and saved off to quay as a built package.
+
+Please see the [CI definition](.gitlab-ci.yml) and the [dependency management script](build/dependency_mgmt.sh) for details.
+
 ## Contributing
 
 1. Fork it!

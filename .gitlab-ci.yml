@@ -13,6 +13,7 @@ variables:
 stages:
   - build
   - test
+  - dependency_mgmt
   - publish
 
 before_script:
@@ -36,6 +37,17 @@ helm_test:
     - branches
   script:
     - build/test.sh
+
+fetch_deps:
+  stage: dependency_mgmt  
+  only:
+    - tags
+    - branches
+  artifacts:
+    paths:
+      - ${CHART_NAME}
+  script:
+   - build/dependency_mgmt.sh
 
 helm_publish_alpha:
   stage: publish

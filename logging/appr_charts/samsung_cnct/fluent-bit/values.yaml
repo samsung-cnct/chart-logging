@@ -1,8 +1,0 @@
-# Default values.
-# This is a YAML-formatted file.
-# Declare name/value pairs to be passed into your templates.
-# name: value
-
-name: fluent-bit
-namespace: default
-image: quay.io/samsung_cnct/fluent-bit-container:latest

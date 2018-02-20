@@ -1,16 +1,16 @@
 appr:
 - name: quay.io/samsung_cnct/fluent-bit
   repository: appr://
-  version: 0.0.0-8
+  version: 0.0.1-50
 - name: quay.io/samsung_cnct/elasticsearch-chart
   repository: appr://
-  version: 0.0.0-28
+  version: 0.0.2-0
 - name: quay.io/samsung_cnct/curator
   repository: appr://
-  version: 0.0.1-0
+  version: 0.0.1-47
 - name: quay.io/samsung_cnct/kibana-chart
   repository: appr://
-  version: 0.0.0-4
+  version: 0.0.1-32
 - name: quay.io/samsung_cnct/eventrouter
   repository: appr://
-  version: 0.0.1-36
+  version: 0.0.1-40

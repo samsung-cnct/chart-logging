@@ -5,12 +5,11 @@ To see all deployed components:
 
 Kibana:
   To get the external address of the kibana server you can run following
-
-  export KIBANA_HOST=$(kubectl get svc/{{.Values.kibana-chart.name}} -n {{.Release.Namespace}} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-  echo http://${KIBANA_HOST}:{{.Values.kibana-chart.port}}
+  export KIBANA_HOST=$(kubectl get svc/{{index .Values "kibana-chart" "name"}} -n {{.Release.Namespace}} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+  echo http://${KIBANA_HOST}:{{index .Values "kibana-chart" "port"}}
 
 Elasticsearch:
-  - curl http://{{.Values.elasticsearch-chart.name}}:{{.Values.elasticsearch-chart.port}}/_cluster/health"]
+  - curl http://{{index .Values "elasticsearch-chart" "name"}}:{{index .Values "elasticsearch-chart" "port"}}/_cluster/health"]
 
 Curator:
   - schedule: {{.Values.curator.schedule}}

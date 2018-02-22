@@ -5,10 +5,8 @@
 # CHART_VER is the 'x.y.z' part of the version. Helm charts may not have a v in their versioning tag.
 # CHART_REL is the 'a' part of the version.
 
-set -x
 set -o errexit
 set -o nounset
-set -o pipefail
 
 CHART_NAME=${CHART_NAME:?CHART_NAME must be set}
 

@@ -1,4 +1,59 @@
 # Default values.
-# This is a YAML-formatted file.
-# Declare name/value pairs to be passed into your templates.
-# name: value
+
+elasticsearch-chart:
+  name: elasticsearch
+  port: 9200
+#  image: quay.io/samsung_cnct/elasticsearch-container
+#  tag: v0.2.0
+#  master_replicas: 3
+#  data_replicas: 3
+#thread_pool.bulk.queue_size: 100
+  
+kibana-chart:
+  name: kibana-logging
+  port: 5601
+#  image: quay.io/samsung_cnct/kibana-container:v0.0.1
+#  replicas: 3
+#  env_value: http://elasticsearch:9200
+
+#fluent-bit:
+#  replicaCount: 1
+#  image:
+#    repository: "quay.io/samsung_cnct/eventrouter-container"
+#    tag: "latest" 
+#  config:
+#    sink: "stdout"
+
+curator:
+  image:
+     name: quay.io/samsung_cnct/curator-container
+     tag: latest
+  schedule: "30 3 * * *"
+  action: delete_indices
+  description:
+    Delete indices older than 14 days and prefixed with logstash-.
+    Ignore the error if the filter does not result in an actionable
+    list of indices (ignore_empty_list) and exit cleanly.
+  
+  filters:
+  - filtertype: pattern
+    kind: prefix
+    value: "logstash-"
+    exclude: False
+  - filtertype: age
+    source: name
+    timestring: '%Y.%m.%d'
+    direction: older
+    unit: days
+    unit_count: 14
+    field: null
+    stats_result: null
+    epoch: null
+    exclude: False
+  
+  logging:
+    loglevel: INFO
+
+test:
+  image: quay.io/samsung_cnct/kraken-tools
+  tag: latest

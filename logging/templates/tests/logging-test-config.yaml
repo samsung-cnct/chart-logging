@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "logging.fullname" . }}-test
+  labels:
+    app: {{ template "logging.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+data:
+  run.sh: |-
+    @test "Testing internal Elasticsearch service" {
+      curl --connect-timeout 5 --retry 12 --retry-delay 1 --retry-max-time 60 http://{{index .Values "elasticsearch-chart" "name"}}:{{index .Values "elasticsearch-chart" "port"}}/_cluster/health
+    }
+
+    @test "Testing internal Kibana UI is accessible" {
+      curl --connect-timeout 5 --retry 12 --retry-delay 1 --retry-max-time 60 {{index .Values "kibana-chart" "name"}}:{{index .Values "kibana-chart" "port"}}
+    }
+

@@ -1,0 +1,17 @@
+This chart will take some time for elasticsearch to initialize.
+
+To see all deployed components:
+  kubectl get all -n {{.Release.Namespace}} 
+
+Kibana:
+  To get the external address of the kibana server you can run following
+
+  export KIBANA_HOST=$(kubectl get svc/{{.Values.kibana-chart.name}} -n {{.Release.Namespace}} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+  echo http://${KIBANA_HOST}:{{.Values.kibana-chart.port}}
+
+Elasticsearch:
+  - curl http://{{.Values.elasticsearch-chart.name}}:{{.Values.elasticsearch-chart.port}}/_cluster/health"]
+
+Curator:
+  - schedule: {{.Values.curator.schedule}}
+  - description: {{.Values.curator.description}}

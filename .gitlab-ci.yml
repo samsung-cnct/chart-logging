@@ -7,13 +7,15 @@ variables:
   ROBOT_ACCOUNT: logging_rw
   HELM_REGISTRY_IMAGE: quay.io/samsung_cnct/helm-registry-agent
   HELM_REGISTRY_VERSION: v0.7.4-helm_2.6
+  KUBECTL_IMAGE: quay.io/samsung_cnct/kraken-tools:latest
 # Create a Gitlab Secret Variable called REGISTRY_PASSWORD and assign it the value of the registry robot docker login password.
 # DO NOT PASTE THIS PASSWORD HERE
 
 stages:
   - build
+  - dependency
   - test
-  - dependency_mgmt
+  - clean
   - publish
 
 before_script:
@@ -30,16 +32,8 @@ build_chart:
   script:
     - build/build.sh
 
-helm_test:
-  stage: test
-  only:
-    - tags
-    - branches
-  script:
-    - build/test.sh
-
 fetch_deps:
-  stage: dependency_mgmt  
+  stage: dependency
   only:
     - tags
     - branches
@@ -48,6 +42,38 @@ fetch_deps:
       - ${CHART_NAME}
   script:
    - build/dependency_mgmt.sh
+
+helm_test:
+  stage: test
+  variables:
+    NAMESPACE: ${CHART_NAME}-test
+    RELEASE: ${CHART_NAME}-test-${CI_PIPELINE_ID}
+  before_script:
+    - mkdir /root/.kube
+    - echo ${TEST_KUBECONFIG} | base64 -d > /root/.kube/config
+    - helm init
+  only:
+    - tags
+    - branches
+  script:
+    - build/test.sh
+
+clean_test:
+  image: $KUBECTL_IMAGE
+  stage: clean
+  allow_failure: true
+  only:
+    - tags
+    - branches
+  variables:
+    NAMESPACE: ${CHART_NAME}-test
+    RELEASE: ${CHART_NAME}-test-${CI_PIPELINE_ID}
+  before_script:
+    - mkdir /root/.kube
+    - echo ${TEST_KUBECONFIG} | base64 -d > /root/.kube/config
+    - helm init
+  script:
+    - build/clean.sh
 
 helm_publish_alpha:
   stage: publish

@@ -5,6 +5,11 @@
 # CHART_VER is the 'x.y.z' part of the version. Helm charts may not have a v in their versioning tag.
 # CHART_REL is the 'a' part of the version.
 
+set -o errexit
+set -o nounset
+
+CHART_NAME=${CHART_NAME:?CHART_NAME must be set}
+
 CHART_VER=$(git describe --tags --abbrev=0 2>/dev/null | sed 's/^v//')
 if [ -n "${CHART_VER}" ]; then
     CHART_REL=$(git rev-list --count v${CHART_VER}..HEAD 2>/dev/null )

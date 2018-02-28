@@ -22,6 +22,9 @@ helm lint ${CHART_NAME}
 
 helm install --replace --name ${RELEASE} --namespace ${NAMESPACE} ./${CHART_NAME}
 
+echo Waiting for install to complete
+sleep ${INSTALL_WAIT}
+
 # if there are tests, run them against the installed chart
 if [[ -d ${CHART_NAME}/templates/tests ]]; then
   echo Testing release ${RELEASE}

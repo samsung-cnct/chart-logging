@@ -10,6 +10,8 @@ variables:
   KUBECTL_IMAGE: quay.io/samsung_cnct/kraken-tools:latest
 # Create a Gitlab Secret Variable called REGISTRY_PASSWORD and assign it the value of the registry robot docker login password.
 # DO NOT PASTE THIS PASSWORD HERE
+  DEPLOY_KUBECONFIG: ${CI_PROJECT_DIR}/deploy/kube.config
+  DEPLOY_VALUES: ${CI_PROJECT_DIR}/deploy/helm-${CHART_NAME}-values.yaml
 
 stages:
   - build
@@ -17,6 +19,9 @@ stages:
   - test
   - clean
   - publish
+  - config
+  - validate
+  - deploy
 
 before_script:
   - helm registry login -u ${REGISTRY_USER}+${ROBOT_ACCOUNT} -p ${REGISTRY_PASSWORD} ${REGISTRY}
@@ -89,3 +94,72 @@ helm_publish_tag:
     - /v[0-9]+\.[0-9]+(\.[0-9]+[a-z]?)?/
   script:
     - cd ${CHART_NAME} && helm registry push ${REGISTRY}/${REGISTRY_USER}/${CHART_NAME} -c stable
+
+.config_artifacts_template:
+  artifacts: &config_artifacts
+    paths:
+      - ${DEPLOY_KUBECONFIG}
+      - ${DEPLOY_VALUES}
+    expire_in: 14 days
+
+generate-staging-config:
+  stage: config
+  only:
+    - master
+  artifacts: *config_artifacts
+  script:
+    - mkdir ${CI_PROJECT_DIR}/deploy
+    - echo ${STAGING_KUBECONFIG} | base64 -d > ${DEPLOY_KUBECONFIG}
+    - helm init --client-only
+    - echo ${STAGING_VALUES} | base64 -d > ${DEPLOY_VALUES}
+
+generate-production-config:
+  stage: config
+  only:
+    - /v[0-9]+\.[0-9]+\.[0-9]+/
+  artifacts: *config_artifacts
+  script:
+    - mkdir ${CI_PROJECT_DIR}/deploy
+    - echo ${PRODUCTION_KUBECONFIG} | base64 -d > ${DEPLOY_KUBECONFIG}
+    - helm init --client-only
+    - echo ${PRODUCTION_VALUES} | base64 -d > ${DEPLOY_VALUES}
+
+validate-config:
+  image: $KRAKEN_TOOLS
+  stage: validate
+  only:
+    - master
+    - /v[0-9]+\.[0-9]+\.[0-9]+/
+  script:
+    - test -s ${DEPLOY_KUBECONFIG}
+    - kubectl --kubeconfig ${DEPLOY_KUBECONFIG} config view || exit $?
+    - test -f ${DEPLOY_VALUES}
+
+deploy-alpha-staging:
+  stage: deploy
+  only:
+    - master
+  variables:
+    NAMESPACE: ${CHART_NAME}-staging
+  before_script:
+    - mkdir /root/.kube
+    - cp ${DEPLOY_KUBECONFIG} /root/.kube/config
+  script:
+    - cd ${CHART_NAME}
+    - helm registry upgrade ${REGISTRY_CHART_URI}:alpha -- ${NAMESPACE}
+      --install --namespace ${NAMESPACE} --values ${DEPLOY_VALUES}
+
+deploy-stable-production:
+  stage: deploy
+  only:
+    - /v[0-9]+\.[0-9]+\.[0-9]+/
+  variables:
+    NAMESPACE: ${CHART_NAME}
+  before_script:
+    - mkdir /root/.kube
+    - cp ${DEPLOY_KUBECONFIG} /root/.kube/config
+  script:
+    - cd ${CHART_NAME}
+    - helm registry upgrade ${REGISTRY_CHART_URI}:stable -- ${NAMESPACE}
+      --install --tiller-namespace ${NAMESPACE} --namespace ${NAMESPACE}
+      --values ${DEPLOY_VALUES}

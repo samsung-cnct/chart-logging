@@ -12,6 +12,7 @@ CHART_NAME=${CHART_NAME:?CHART_NAME must be set}
 NAMESPACE=${NAMESPACE:?NAMESPACE must be set}
 RELEASE=${RELEASE:?RELEASE must be set}
 INSTALL_WAIT=${WAIT:-120}
+CI_JOB_ID=${CI_JOB_ID:-empty}
 
 if [[ ! -d ${CHART_NAME} ]]; then
   echo >&2 "Directory for chart '$CHART_NAME' does not exist."
@@ -20,7 +21,7 @@ fi
 
 helm lint ${CHART_NAME}
 
-helm install --replace --name ${RELEASE} --namespace ${NAMESPACE} ./${CHART_NAME}
+helm install --replace --name ${RELEASE} --namespace ${NAMESPACE} ./${CHART_NAME} --set name=elasticsearch-${CI_JOB_ID}
 
 echo Waiting for install to complete
 sleep ${INSTALL_WAIT}

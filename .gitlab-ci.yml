@@ -16,11 +16,12 @@ variables:
 stages:
   - build
   - dependency
+  - config
+  - validate
+  - test_prep
   - test
   - clean
   - publish
-  - config
-  - validate
   - deploy
 
 before_script:
@@ -48,53 +49,6 @@ fetch_deps:
   script:
    - build/dependency_mgmt.sh
 
-helm_test:
-  stage: test
-  variables:
-    NAMESPACE: ${CHART_NAME}-test
-    RELEASE: ${CHART_NAME}-test-${CI_PIPELINE_ID}
-  before_script:
-    - mkdir /root/.kube
-    - echo ${TEST_KUBECONFIG} | base64 -d > /root/.kube/config
-    - helm init
-  only:
-    - tags
-    - branches
-  script:
-    - build/test.sh
-
-clean_test:
-  image: $KUBECTL_IMAGE
-  stage: clean
-  allow_failure: true
-  when: always
-  only:
-    - tags
-    - branches
-  variables:
-    NAMESPACE: ${CHART_NAME}-test
-    RELEASE: ${CHART_NAME}-test-${CI_PIPELINE_ID}
-  before_script:
-    - mkdir /root/.kube
-    - echo ${TEST_KUBECONFIG} | base64 -d > /root/.kube/config
-    - helm init
-  script:
-    - build/clean.sh
-
-helm_publish_alpha:
-  stage: publish
-  only:
-    - master
-  script:
-    - cd ${CHART_NAME} && helm registry push ${REGISTRY}/${REGISTRY_USER}/${CHART_NAME} -c alpha
-
-helm_publish_tag:
-  stage: publish
-  only:
-    - /v[0-9]+\.[0-9]+(\.[0-9]+[a-z]?)?/
-  script:
-    - cd ${CHART_NAME} && helm registry push ${REGISTRY}/${REGISTRY_USER}/${CHART_NAME} -c stable
-
 .config_artifacts_template:
   artifacts: &config_artifacts
     paths:
@@ -105,7 +59,7 @@ helm_publish_tag:
 generate-staging-config:
   stage: config
   only:
-    - master
+    - branches
   artifacts: *config_artifacts
   script:
     - mkdir ${CI_PROJECT_DIR}/deploy
@@ -125,7 +79,7 @@ generate-production-config:
     - echo ${PRODUCTION_VALUES} | base64 -d > ${DEPLOY_VALUES}
 
 validate-config:
-  image: $KRAKEN_TOOLS
+  image: $KUBECTL_IMAGE
   stage: validate
   only:
     - master
@@ -134,6 +88,72 @@ validate-config:
     - test -s ${DEPLOY_KUBECONFIG}
     - kubectl --kubeconfig ${DEPLOY_KUBECONFIG} config view || exit $?
     - test -f ${DEPLOY_VALUES}
+
+namespace_create:
+  only:
+    - branches
+  image: $KUBECTL_IMAGE
+  stage: test_prep
+  variables:
+    NAMESPACE: ${CHART_NAME}-${CI_PIPELINE_ID}-test
+  before_script:
+    - mkdir /root/.kube
+    - cp ${DEPLOY_KUBECONFIG} /root/.kube/config
+  script:
+    - kubectl create namespace $NAMESPACE
+
+helm_test:
+  only:
+    - branches
+  stage: test
+  variables:
+    NAMESPACE: ${CHART_NAME}-${CI_PIPELINE_ID}-test
+    RELEASE: ${CHART_NAME}-test-${CI_PIPELINE_ID}
+  before_script:
+    - mkdir /root/.kube
+    - echo ${TEST_KUBECONFIG} | base64 -d > /root/.kube/config
+    - helm init
+  only:
+    - tags
+    - branches
+  script:
+    - build/test.sh
+
+clean_test:
+  only:
+    - branches
+  image: $KUBECTL_IMAGE
+  stage: clean
+  allow_failure: true
+  when: always
+  only:
+    - tags
+    - branches
+  variables:
+    NAMESPACE: ${CHART_NAME}-${CI_PIPELINE_ID}-test
+    RELEASE: ${CHART_NAME}-test-${CI_PIPELINE_ID}
+  before_script:
+    - mkdir /root/.kube
+    - echo ${TEST_KUBECONFIG} | base64 -d > /root/.kube/config
+    - helm init
+  script:
+    - build/clean.sh
+  after_script:
+    - kubectl delete namespace $NAMESPACE
+
+helm_publish_alpha:
+  stage: publish
+  only:
+    - master
+  script:
+    - cd ${CHART_NAME} && helm registry push ${REGISTRY}/${REGISTRY_USER}/${CHART_NAME} -c alpha
+
+helm_publish_tag:
+  stage: publish
+  only:
+    - /v[0-9]+\.[0-9]+(\.[0-9]+[a-z]?)?/
+  script:
+    - cd ${CHART_NAME} && helm registry push ${REGISTRY}/${REGISTRY_USER}/${CHART_NAME} -c stable
 
 deploy-alpha-staging:
   stage: deploy

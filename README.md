@@ -75,6 +75,9 @@ This project is built with the [helm application registry](https://github.com/ap
 
 Please see the [CI definition](.gitlab-ci.yml) and the [dependency management script](build/dependency_mgmt.sh) for details.
 
+## CI system
+This repository uses [gitlab ci](https://about.gitlab.com/features/gitlab-ci-cd/) for CI.  The gitlab ci config file sets a number of tests to be run for each commit to an open PR, a merge to master and for a pushed tag.  A merge to master or a new tag will create new packaged versions in the alpha and stable channels, respectively, and will deploy to staging and production clusters.  Specifics on these processes can be found in .gitlab-ci.yml at the top level of this repository.  
+
 ## Contributing
 
 1. Fork it!

@@ -21,7 +21,8 @@ fi
 
 helm lint ${CHART_NAME}
 
-helm install --replace --name ${RELEASE} --namespace ${NAMESPACE} ./${CHART_NAME} --set elasticsearch-chart.name=elasticsearch-${CI_JOB_ID}
+helm install --replace --name ${RELEASE} --namespace ${NAMESPACE} ./${CHART_NAME} --set elasticsearch-chart.name=elasticsearch-${CI_JOB_ID} \
+             --set eventrouter.name=eventrouter-${CI_JOB_ID} --set fluent-bit.name=fluent-bit-${CI_JOB_ID}
 
 echo Waiting for install to complete
 sleep ${INSTALL_WAIT}

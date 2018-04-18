@@ -19,18 +19,18 @@ if [[ ! -d ${CHART_NAME} ]]; then
   exit 1
 fi
 
-helm lint ${CHART_NAME}
+helm lint "${CHART_NAME}"
 
-helm install --replace --name ${RELEASE} --namespace ${NAMESPACE} ./${CHART_NAME} --set elasticsearch-chart.name=elasticsearch-${CI_JOB_ID} \
-             --set eventrouter.name=eventrouter-${CI_JOB_ID} --set fluent-bit.name=fluent-bit-${CI_JOB_ID}
+helm install --replace --name "${RELEASE}" --namespace "${NAMESPACE}" --set "elasticsearch-chart.name=elasticsearch-${CI_JOB_ID}" \
+             --set "eventrouter.name=eventrouter-${CI_JOB_ID}" --set "fluent-bit.name=fluent-bit-${CI_JOB_ID}" "./${CHART_NAME}"
 
 echo Waiting for install to complete
-sleep ${INSTALL_WAIT}
+sleep "${INSTALL_WAIT}"
 
 # if there are tests, run them against the installed chart
 if [[ -d ${CHART_NAME}/templates/tests ]]; then
-  echo Testing release ${RELEASE}
-  helm test ${RELEASE} --cleanup
+  echo Testing release "${RELEASE}"
+  helm test "${RELEASE}" --cleanup
   HELM_TEST_EXIT_CODE=$?
 fi
 

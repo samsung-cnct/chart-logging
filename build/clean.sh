@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# This script un-installs the helm chart and 
+# This script un-installs the helm chart and
 # manually removes PVCs
 
 set -o errexit
@@ -19,7 +19,7 @@ fi
 
 # cleanup
 echo Cleaning up
-helm delete --purge ${RELEASE} &> /dev/null &
+helm delete --purge "${RELEASE}" &> /dev/null &
 
 echo Waiting for un-install
 sleep ${UNINSTALL_WAIT}

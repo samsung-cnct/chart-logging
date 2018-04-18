@@ -13,6 +13,10 @@ variables:
   DEPLOY_KUBECONFIG: ${CI_PROJECT_DIR}/deploy/kube.config
   DEPLOY_VALUES: ${CI_PROJECT_DIR}/deploy/helm-${CHART_NAME}-values.yaml
   TILLER_NAMESPACE: kraken
+  CI_DEBUG_TRACE: "false"
+
+before_script:
+  - helm registry login -u ${REGISTRY_USER}+${ROBOT_ACCOUNT} -p ${REGISTRY_PASSWORD} ${REGISTRY}
 
 stages:
   - build
@@ -24,9 +28,6 @@ stages:
   - clean
   - publish
   - deploy
-
-before_script:
-  - helm registry login -u ${REGISTRY_USER}+${ROBOT_ACCOUNT} -p ${REGISTRY_PASSWORD} ${REGISTRY}
 
 build_chart:
   stage: build
@@ -122,7 +123,7 @@ clean_test:
     - branches
   image: $KUBECTL_IMAGE
   stage: clean
-  allow_failure: true
+  allow_failure: false
   when: always
   variables:
     NAMESPACE: ${CHART_NAME}-${CI_PIPELINE_ID}-test
@@ -134,7 +135,7 @@ clean_test:
   script:
     - build/clean.sh
   after_script:
-    - kubectl delete namespace $NAMESPACE
+    - kubectl delete --force ns $NAMESPACE
 
 helm_publish_alpha:
   stage: publish

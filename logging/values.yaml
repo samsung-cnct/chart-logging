@@ -7,8 +7,8 @@ elasticsearch-chart:
 #  tag: v0.2.0
 #  master_replicas: 3
 #  data_replicas: 3
-#thread_pool.bulk.queue_size: 100
-  
+#  thread_pool.bulk.queue_size: 100
+
 kibana-chart:
   name: kibana-logging
   port: 5601
@@ -20,7 +20,7 @@ kibana-chart:
 #  replicaCount: 1
 #  image:
 #    repository: "quay.io/samsung_cnct/eventrouter-container"
-#    tag: "latest" 
+#    tag: "latest"
 #  config:
 #    sink: "stdout"
 
@@ -34,7 +34,7 @@ curator:
     Delete indices older than 14 days and prefixed with logstash-.
     Ignore the error if the filter does not result in an actionable
     list of indices (ignore_empty_list) and exit cleanly.
-  
+
   filters:
   - filtertype: pattern
     kind: prefix
@@ -50,7 +50,7 @@ curator:
     stats_result: null
     epoch: null
     exclude: False
-  
+
   logging:
     loglevel: INFO
 

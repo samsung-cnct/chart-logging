@@ -22,7 +22,7 @@ set -o pipefail
   }
 
 #  helm registry only works on the current directory, go there
-cd `pwd`/${CHART_NAME}
+cd "$(pwd)/${CHART_NAME}"
 
 #  overwrite requirements.yaml, this is the fudge
 helm registry dep --overwrite

@@ -7,7 +7,7 @@ appr:
   version: 0.0.2-0
 - name: quay.io/samsung_cnct/curator
   repository: appr://
-  version: 0.0.3-0
+  version: 0.0.5-0
 - name: quay.io/samsung_cnct/kibana-chart
   repository: appr://
   version: 0.1.2-0

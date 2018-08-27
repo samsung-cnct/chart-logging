@@ -1,7 +1,11 @@
+# Deprecated: chart-logging
+This repo has been deprecated in favor of [chart-logging-central](https://github.com/samsung-cnct/chart-logging-central) and [chart-logging-client](https://github.com/samsung-cnct/chart-logging-client). 
+
+
 [![pipeline status](https://git.cnct.io/common-tools/samsung-cnct_chart-logging/badges/master/pipeline.svg)](https://git.cnct.io/common-tools/samsung-cnct_chart-logging/commits/master)
 
 
-# Logging for Kubernetes Cluster
+## Logging for Kubernetes Cluster
 This is a light-weight logging solution for a production grade Kubernetes cluster. This system pulls logs from pods, enriches them with Kubernetes metadata, saves them in a data store and makes them available for visualizing and querying - without ever leaving the kubernetes cluster.  This system also handles Kubernetes event stream logs with [eventrouter](https://github.com/samsung-cnct/chart-eventrouter), but does not yet collect etcd logs.
 
 ## How to install on running Kubernetes cluster with `helm`
@@ -89,4 +93,3 @@ This repository uses [gitlab ci](https://about.gitlab.com/features/gitlab-ci-cd/
 ## Credits
 
 Created and maintained by the Samsung Cloud Native Computing Team.
-
